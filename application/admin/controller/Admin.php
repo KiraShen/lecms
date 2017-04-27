@@ -1,9 +1,13 @@
 <?php
 namespace app\admin\controller;
 use think\Controller;
+use think\Validate;
 use think\Db;
 use app\admin\model\Admin as AdminModel;
 //use app\admin\controller\Base;
+use PHPExcel_IOFactory;
+use PHPExcel;
+use think\Request;
 class Admin extends Controller
 {
     public function lst()
@@ -82,9 +86,72 @@ class Admin extends Controller
     	}
     	
     }
+    public function push(){
+        //$objPHPExcel = new ／vendor/PHPoffice/PHPExcel(); 
+        return $this->fetch();
+    }
 
     public function logout(){
         session(null);
         $this->success('退出成功！','Login/index');
     }
+
+    public function up(Request $request)
+    {
+        // 获取表单上传文件
+        $file = $request->file('file');
+        // // 上传文件验证(后期扩展为独立的验证文件)
+        // $result = $this->validate(['file' => $file], ['file'=>'require|iamge:xls,xlsx'],['file.require' => '请选择上传文件', 'file.image' => '非法文件']);
+        // if(true !== $result){
+        //     $this->error($result);
+        //}
+        if (empty($file)) {
+            $this->error('请选择上传文件');
+        }
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->validate(['ext' => 'xls,xlsx'])->move(ROOT_PATH . 'public' . DS . 'uploads');
+        if ($info) {
+            //$this->success('文件上传成功：' . $info->getRealPath());
+            //echo $info->getSaveName();die;
+            $res = $info->getSaveName();
+        } else {
+            // 上传失败获取错误信息
+            $this->error($file->getError());
+        }
+        $objReader = PHPExcel_IOFactory::createReader('Excel5');
+        $objPHPExcel = $objReader->load(ROOT_PATH.'public/uploads/'.$res,$encode='utf-8');
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow(); // 取得总行数
+        $highestColumn = ord($sheet->getHighestColumn())-64; // 取得总列数
+        $column = ['','A','B','C','D','E','F','G'];
+        //echo $highestRow;die;
+        for($i=1;$i<=$highestRow;$i++){
+            $data['username'] = $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getValue();  
+            $data['password'] = md5($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue());
+        }
+        if(Db::name('admin')->insert($data)){
+            return $this->success('添加管理员成功！','lst');
+        }else{
+            return $this->error('添加管理员失败！');
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

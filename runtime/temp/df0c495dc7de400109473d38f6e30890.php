@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:78:"/Users/apple/Documents/workspace/lecms/application/admin/view/index/index.html";i:1493084276;s:80:"/Users/apple/Documents/workspace/lecms/application/admin/view/common/header.html";i:1493260694;s:81:"/Users/apple/Documents/workspace/lecms/application/admin/view/common/sidebar.html";i:1493260653;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:78:"/Users/apple/Documents/workspace/lecms/application/admin/view/index/index.html";i:1493084276;s:80:"/Users/apple/Documents/workspace/lecms/application/admin/view/common/header.html";i:1493260694;s:81:"/Users/apple/Documents/workspace/lecms/application/admin/view/common/sidebar.html";i:1493262434;}*/ ?>
 <!doctype html>
 <html class="no-js fixed-layout">
 <head>
@@ -68,7 +68,7 @@ __PUBLIC__
             <li><a href="admin-404.html"><span class="am-icon-bug"></span> 404</a></li> -->
           </ul>
         </li>
-        <li><a href="<?php echo url('admin/lst'); ?>"><span class="am-icon-male"></span> 管理员</a></li>
+        <li><a href="<?php echo url('admin/lst'); ?>"><span class="am-icon-gear"></span> 设置</a></li>
        <!--  <li><a href="admin-form.html"><span class="am-icon-pencil-square-o"></span> 表单</a></li>
         <li><a href="#"><span class="am-icon-sign-out"></span> 注销</a></li> -->
       </ul>
